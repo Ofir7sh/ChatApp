@@ -1,15 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.models.chat_room import ChatRoom
+from app.models.chat_room import message
 
-
-async def get_chatrooms(db: AsyncSession):
-    result = await db.execute(select(ChatRoom))
+async def get_messages_for_room(db: AsyncSession, room_id: int):
+    result = await db.execute(select(message).where(message.chat_room_id == room_id).order_by(message.timestamp))
     return result.scalars().all()
 
-async def create_chatroom(db: AsyncSession, name: str):
-    db_room = ChatRoom(name=name)
-    db.add(db_room)
+async def create_message(db: AsyncSession, room_id: int, username: str, content: str):
+    message = message(chat_room_id=room_id, username=username, content=content)
+    db.add(message)
     await db.commit()
-    await db.refresh(db_room)
-    return db_room
+    await db.refresh(message)
+    return message
