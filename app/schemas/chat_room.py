@@ -15,3 +15,6 @@ class ChatRoom(ChatRoomBase):
 
     class Config:
         orm_mode = True
+
+class ChatRoomResponse(ChatRoom):
+    messages: Optional[List[Message]] = []

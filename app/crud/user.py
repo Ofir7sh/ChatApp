@@ -1,18 +1,22 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from sqlalchemy.orm import Session
 from app.models.user import User
-## ?
-from app.core.security import get_password_hash
-from typing import Optional
+from app.core.security import get_password_hash, verify_password
 
-async def get_user(db: AsyncSession, username: str) -> Optional[User]:
-    result = await db.execute(select(User).where(User.username == username))
-    return result.scalars().first()
+def get_user(db: Session, username: str):
+    return db.query(User).filter(User.username == username).first()
 
-async def create_user(db: AsyncSession, username: str, password: str) -> User:
+def create_user(db: Session, username: str, password: str):
     hashed_password = get_password_hash(password)
     user = User(username=username, hashed_password=hashed_password)
     db.add(user)
-    await db.commit()
-    await db.refresh(user)
+    db.commit()
+    db.refresh(user)
+    return user
+
+def authenticate_user(db: Session, username: str, password: str):
+    user = get_user(db, username)
+    if not user:
+        return False
+    if not verify_password(password, user.hashed_password):
+        return False
     return user

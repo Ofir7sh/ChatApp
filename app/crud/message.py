@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.models.chat_room import message
+from app.models.message import Message
 
 async def get_messages_for_room(db: AsyncSession, room_id: int):
-    result = await db.execute(select(message).where(message.chat_room_id == room_id).order_by(message.timestamp))
+    result = await db.execute(select(Message).where(Message.chat_room_id == room_id).order_by(Message.timestamp))
     return result.scalars().all()
 
 async def create_message(db: AsyncSession, room_id: int, username: str, content: str):

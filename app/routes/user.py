@@ -1,34 +1,28 @@
-from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from app import crud, security
-from app.schemas import UserLogin, UserRegister
-from app.database import get_async_db
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from app.schemas.user import UserCreate, UserLogin, Token
+from app.crud.user import get_user, create_user, authenticate_user
+from app.database import get_db
+from app.core.security import create_access_token
 
 router = APIRouter()
 
-# Check if the username exist
-@router.post("/users/check")
-async def check_user(user: UserLogin, db: AsyncSession = Depends(get_async_db)):
-    db_user = await crud.get_user_by_username(db, user.username)
-    return {"user_exists": bool(db_user)}
+@router.post("/login", response_model=Token)
+def login(user_login: UserLogin, db: Session = Depends(get_db)):
+    user = get_user(db, user_login.username)
+    if not user:
+        raise HTTPException(status_code=400, detail="User not found. Please register.")
+    authenticated_user = authenticate_user(db, user_login.username, user_login.password)
+    if not authenticated_user:
+        raise HTTPException(status_code=401, detail="Incorrect password.")
+    token = create_access_token({"sub": user.username})
+    return {"access_token": token, "token_type": "bearer"}
 
-# Register new user
-@router.post("/users/register")
-async def register(user: UserRegister, db: AsyncSession = Depends(get_async_db)):
-    db_user = await crud.get_user_by_username(db, user.username)
-    if db_user:
-        raise HTTPException(status_code=400, detail="User already exists")
-    created_user = await crud.create_user(db, user.username, user.password)
-    token = security.create_access_token({"sub": created_user.username})
-    return {"msg": "User created", "access_token": token}
-
-# Login user
-@router.post("/users/login")
-async def login(user: UserLogin, db: AsyncSession = Depends(get_async_db)):
-    db_user = await crud.get_user_by_username(db, user.username)
-    if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
-    if not security.verify_password(user.password, db_user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid password")
-    token = security.create_access_token({"sub": db_user.username})
-    return {"msg": "Login successful", "access_token": token}
+@router.post("/register", response_model=Token)
+def register(user_create: UserCreate, db: Session = Depends(get_db)):
+    user = get_user(db, user_create.username)
+    if user:
+        raise HTTPException(status_code=400, detail="Username already registered.")
+    new_user = create_user(db, user_create.username, user_create.password)
+    token = create_access_token({"sub": new_user.username})
+    return {"access_token": token, "token_type": "bearer"}
