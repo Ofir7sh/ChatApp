@@ -5,14 +5,10 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException
 from jose import JWTError
 import logging
+from app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 logger = logging.getLogger(__name__)
 
-## TODO - move to sep config file
-SECRET_KEY = "your-secret-key"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-##
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/login")
 
