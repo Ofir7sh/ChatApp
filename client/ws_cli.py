@@ -1,25 +1,13 @@
-import websocket
-import threading
+import asyncio
+import websockets
 import json
 
-def on_message(ws, message):
-    msg = json.loads(message)
-    print(f"[{msg['username']}] {msg['content']}")
-
-def on_open(ws):
-    def run():
+async def chat_client():
+    uri = "ws://localhost:8000/ws/room1"
+    async with websockets.connect(uri) as websocket:
+        await websocket.send(json.dumps({"user": "alice", "message": "שלום"}))
         while True:
-            msg = input()
-            if msg.strip():
-                payload = {
-                    "username": "ofir", 
-                    "content": msg
-                }
-                ws.send(json.dumps(payload))
-    threading.Thread(target=run).start()
+            response = await websocket.recv()
+            print("הודעה מהשרת:", response)
 
-def start_ws(room_name):
-    ws = websocket.WebSocketApp(f"ws://localhost:8000/ws/{room_name}",
-                                on_message=on_message,
-                                on_open=on_open)
-    ws.run_forever()
+asyncio.run(chat_client())

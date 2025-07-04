@@ -4,11 +4,13 @@ import os
 import threading
 import time
 import platform
+import asyncio
+import websockets
+import json
 
 from app.config import BASE_URL, TOKEN_FILE, USERNAME_FILE
 
 app = typer.Typer()
-
 
 def clear_screen():
     os.system("cls" if platform.system() == "Windows" else "clear")
@@ -47,29 +49,50 @@ def fetch_chatrooms():
         print(f"Failed to get chatrooms: {res.text}")
         return []
 
-def fetch_messages(room_name):
-    res = requests.get(f"{BASE_URL}/messages/{room_name}", headers=authenticated_headers())
-    if res.status_code == 200:
-        return res.json()
-    else:
-        print(f"Failed to get messages: {res.text}")
-        return []
-
-def send_message(room_name, content, username):
-    res = requests.post(
-        f"{BASE_URL}/messages/{room_name}",
-        json={"content": content, "username": username},
-        headers=authenticated_headers()
-    )
-    if res.status_code != 200:
-        print(f"Failed to send message: {res.text}")
-
 def check_user_exists(username):
     res = requests.get(f"{BASE_URL}/users/exists/{username}")
     if res.status_code != 200:
         print("Error checking user:", res.text)
         raise typer.Exit()
     return res.json().get("exists", False)
+
+async def websocket_chat(room_name, username, stop_event):
+    # חיבור ל-WebSocket
+    # חשוב: תתאימי את הכתובת לשרת שלך בהתאם (החלף localhost:8000 לכתובת שלך)
+    uri = f"ws://localhost:8000/ws/{room_name}"
+    try:
+        async with websockets.connect(uri) as websocket:
+            print(f"Connected to WebSocket room: {room_name}")
+
+            async def send_messages():
+                while not stop_event.is_set():
+                    content = await asyncio.get_event_loop().run_in_executor(None, input)
+                    if content.strip() == ":back":
+                        stop_event.set()
+                        break
+                    elif content.strip() == ":clear":
+                        clear_screen()
+                    elif content.strip():
+                        message = {"username": username, "content": content.strip()}
+                        await websocket.send(json.dumps(message))
+
+            async def receive_messages():
+                while not stop_event.is_set():
+                    try:
+                        response = await websocket.recv()
+                        msg = json.loads(response)
+                        # הדפסת ההודעה בזמן אמת
+                        print(f"[{msg.get('timestamp', '')}] {msg['username']}: {msg['content']}")
+                    except websockets.ConnectionClosed:
+                        print("WebSocket connection closed")
+                        stop_event.set()
+
+            # להריץ במקביל שליחה וקבלה
+            await asyncio.gather(send_messages(), receive_messages())
+
+    except Exception as e:
+        print(f"WebSocket connection error: {e}")
+        stop_event.set()
 
 @app.command()
 def cli():
@@ -97,7 +120,6 @@ def cli():
     save_token(token)
     print("Logged in successfully.")
 
-    # MAIN LOOP – Room selection
     while True:
         chatrooms = fetch_chatrooms()
         print("\nAvailable chat rooms:")
@@ -130,41 +152,26 @@ def cli():
             room_name = chatrooms[choice - 1]["name"]
 
         print(f"\nEntered chat room: {room_name}")
+        stop_event = threading.Event()
 
-        # Start background refresher thread
-        stop_flag = threading.Event()
+        # הפעלת WebSocket בלולאת אירועים אסינכרונית בתוך Thread נפרד
+        def start_ws_loop():
+            asyncio.run(websocket_chat(room_name, username, stop_event))
 
-        def refresher():
-            last_seen = set()
-            while not stop_flag.is_set():
-                messages = fetch_messages(room_name)
-                new_msgs = [m for m in messages if m["id"] not in last_seen]
-                for msg in new_msgs:
-                    ts = msg["timestamp"]
-                    print(f"[{ts}] {msg['username']}: {msg['content']}")
-                    last_seen.add(msg["id"])
-                time.sleep(5)
-
-        thread = threading.Thread(target=refresher, daemon=True)
-        thread.start()
+        ws_thread = threading.Thread(target=start_ws_loop, daemon=True)
+        ws_thread.start()
 
         print("Type your messages below.")
         print("Use ':back' to return to room selection, ':clear' to clear the screen, or Ctrl+C to exit.")
+
         try:
-            while True:
-                content = input()
-                if content.strip() == ":back":
-                    stop_flag.set()
-                    time.sleep(0.1)
-                    break  # Return to room list
-                elif content.strip() == ":clear":
-                    clear_screen()
-                elif content.strip():
-                    send_message(room_name, content.strip(), username)
+            while not stop_event.is_set():
+                time.sleep(0.1)
         except KeyboardInterrupt:
             print("\nGoodbye!")
-            stop_flag.set()
+            stop_event.set()
             raise typer.Exit()
-    
+
+
 if __name__ == "__main__":
     app()

@@ -25,4 +25,4 @@ app = FastAPI()
 app.include_router(user.router, prefix="/users", tags=["users"])
 app.include_router(chat_room.router, prefix="/chatrooms", tags=["chatrooms"])
 app.include_router(message.router, prefix="/messages", tags=["messages"])
-app.include_router(message_ws.router)
+app.include_router(message_ws.router)  # ללא פריפיקס, כדי שהנתיב יהיה /ws/{room_name}
