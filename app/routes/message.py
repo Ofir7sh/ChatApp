@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
 from typing import List
 
 from app.database import get_db
@@ -9,13 +9,18 @@ from app.crud import chat_room as chatroom_crud
 
 router = APIRouter()
 
-@router.post("/{room_id}", response_model=schemas.Message)
-async def send_message(room_id: int, msg: schemas.MessageCreate, db: AsyncSession = Depends(get_db)):
-    room = await chatroom_crud.get_chatroom_by_id(db, room_id)
+@router.post("/{room_name}", response_model=schemas.Message)
+def send_message(room_name: str, msg: schemas.MessageCreate, db: Session = Depends(get_db)):
+    room = chatroom_crud.get_chatroom_by_name(db, room_name)
     if not room:
         raise HTTPException(status_code=404, detail="Chat room not found")
-    return await crud.create_message(db, room_id=room_id, msg=msg)
+    # הנחה שה־MessageCreate כולל username ו-content
+    return crud.create_message(db, room_id=room.id, username=msg.username, content=msg.content)
 
-@router.get("/{room_id}", response_model=List[schemas.Message])
-async def get_messages(room_id: int, db: AsyncSession = Depends(get_db)):
-    return await crud.get_messages_for_room(db, room_id)
+
+@router.get("/{room_name}", response_model=List[schemas.Message])
+def get_messages(room_name: str, db: Session = Depends(get_db)):
+    room = chatroom_crud.get_chatroom_by_name(db, room_name)
+    if not room:
+        raise HTTPException(status_code=404, detail="Chat room not found")
+    return crud.get_messages_by_room(db, room.id)

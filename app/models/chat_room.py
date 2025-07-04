@@ -10,4 +10,4 @@ class ChatRoom(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), unique=True, index=True)
 
-    messages = relationship("Message", back_populates="room")
+    messages = relationship("Message", back_populates="chat_room")
