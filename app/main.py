@@ -3,6 +3,7 @@ from app.database import engine
 from app.database import Base
 from app.routes import user, chat_room, message
 import logging
+from app.routes import message_ws
 
 # Define logger
 logging.basicConfig(
@@ -24,3 +25,4 @@ app = FastAPI()
 app.include_router(user.router, prefix="/users", tags=["users"])
 app.include_router(chat_room.router, prefix="/chatrooms", tags=["chatrooms"])
 app.include_router(message.router, prefix="/messages", tags=["messages"])
+app.include_router(message_ws.router)
