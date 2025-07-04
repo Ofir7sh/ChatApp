@@ -1,72 +1,25 @@
-2025-07-04 05:29:53 INFO Authenticated user: o
-2025-07-04 05:29:54 INFO User 'o' sending message to room 'heyhey': content='d'
-2025-07-04 05:30:04 INFO Authenticated user: o
-2025-07-04 05:30:04 INFO User 'o' sending message to room 'heyhey': content='h'
-2025-07-04 05:32:24 WARNING (trapped) error reading bcrypt version
+2025-07-04 09:52:52 INFO WebSocket disconnected from room test
+2025-07-04 09:53:10 WARNING (trapped) error reading bcrypt version
 Traceback (most recent call last):
   File "/home/user/Desktop/ChatApp_proj/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
     version = _bcrypt.__about__.__version__
               ^^^^^^^^^^^^^^^^^
 AttributeError: module 'bcrypt' has no attribute '__about__'
-2025-07-04 05:32:24 DEBUG detected 'bcrypt' backend, version '<unknown>'
-2025-07-04 05:32:24 DEBUG 'bcrypt' backend lacks $2$ support, enabling workaround
-2025-07-04 05:33:39 WARNING (trapped) error reading bcrypt version
-Traceback (most recent call last):
-  File "/home/user/Desktop/ChatApp_proj/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
-    version = _bcrypt.__about__.__version__
-              ^^^^^^^^^^^^^^^^^
-AttributeError: module 'bcrypt' has no attribute '__about__'
-2025-07-04 05:33:39 DEBUG detected 'bcrypt' backend, version '<unknown>'
-2025-07-04 05:33:39 DEBUG 'bcrypt' backend lacks $2$ support, enabling workaround
-2025-07-04 05:33:45 INFO Received token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhYmMiLCJleHAiOjE3NTE2MjM0MTl9.lSHgVItdICJj3T9-kXj2FDwjELNMRkzpwYSHTlaahZg
-2025-07-04 05:33:45 INFO Authenticated user: abc
-2025-07-04 05:33:45 INFO User 'abc' sending message to room 'testing': content='aa'
-2025-07-04 05:34:07 INFO Received token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhYmMiLCJleHAiOjE3NTE2MjM0MTl9.lSHgVItdICJj3T9-kXj2FDwjELNMRkzpwYSHTlaahZg
-2025-07-04 05:34:07 INFO Authenticated user: abc
-2025-07-04 05:34:07 INFO User 'abc' sending message to room 'testing': content='aaa'
-2025-07-04 05:34:10 INFO Received token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhYmMiLCJleHAiOjE3NTE2MjM0MTl9.lSHgVItdICJj3T9-kXj2FDwjELNMRkzpwYSHTlaahZg
-2025-07-04 05:34:10 INFO Authenticated user: abc
-2025-07-04 05:34:10 INFO User 'abc' sending message to room 'testing': content='ccc'
-2025-07-04 05:37:48 INFO Received token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhYmMiLCJleHAiOjE3NTE2MjM0MTl9.lSHgVItdICJj3T9-kXj2FDwjELNMRkzpwYSHTlaahZg
-2025-07-04 05:37:48 INFO Authenticated user: abc
-2025-07-04 05:37:48 INFO User 'abc' sending message to room '<3': content='ok'
-2025-07-04 05:38:05 INFO Received token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhYmMiLCJleHAiOjE3NTE2MjM0MTl9.lSHgVItdICJj3T9-kXj2FDwjELNMRkzpwYSHTlaahZg
-2025-07-04 05:38:05 INFO Authenticated user: abc
-2025-07-04 05:38:05 INFO User 'abc' sending message to room 'larleret': content='-1'
-2025-07-04 05:38:14 WARNING (trapped) error reading bcrypt version
-Traceback (most recent call last):
-  File "/home/user/Desktop/ChatApp_proj/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
-    version = _bcrypt.__about__.__version__
-              ^^^^^^^^^^^^^^^^^
-AttributeError: module 'bcrypt' has no attribute '__about__'
-2025-07-04 05:38:14 DEBUG detected 'bcrypt' backend, version '<unknown>'
-2025-07-04 05:38:14 DEBUG 'bcrypt' backend lacks $2$ support, enabling workaround
-2025-07-04 07:07:48 INFO WebSocket connected to room room1
-2025-07-04 07:07:48 INFO Message received in room1: {'user': 'alice', 'message': 'שלום'}
-2025-07-04 07:08:55 INFO WebSocket disconnected from room room1
-2025-07-04 07:11:33 WARNING (trapped) error reading bcrypt version
-Traceback (most recent call last):
-  File "/home/user/Desktop/ChatApp_proj/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
-    version = _bcrypt.__about__.__version__
-              ^^^^^^^^^^^^^^^^^
-AttributeError: module 'bcrypt' has no attribute '__about__'
-2025-07-04 07:11:33 DEBUG detected 'bcrypt' backend, version '<unknown>'
-2025-07-04 07:11:33 DEBUG 'bcrypt' backend lacks $2$ support, enabling workaround
-2025-07-04 07:11:44 INFO WebSocket connected to room <3
-2025-07-04 07:11:48 INFO Message received in <3: {'username': 'wstwst', 'content': 'hey'}
-2025-07-04 07:11:52 INFO Message received in <3: {'username': 'wstwst', 'content': 'how are you'}
-2025-07-04 07:12:57 INFO Message received in <3: {'username': 'wstwst', 'content': 'im good'}
-2025-07-04 07:13:00 INFO Message received in <3: {'username': 'wstwst', 'content': 'thanks'}
-2025-07-04 07:13:03 INFO WebSocket disconnected from room <3
-2025-07-04 07:13:18 INFO WebSocket connected to room ws_
-2025-07-04 07:13:25 INFO Message received in ws_: {'username': 'os', 'content': 'cool ! :)'}
-2025-07-04 07:13:29 INFO Message received in ws_: {'username': 'os', 'content': 'bye bye'}
-2025-07-04 07:13:36 INFO WebSocket connected to room heyhey
-2025-07-04 07:13:41 INFO WebSocket disconnected from room heyhey
-2025-07-04 07:13:41 INFO WebSocket disconnected from room ws_
-2025-07-04 07:14:02 INFO WebSocket connected to room <3
-2025-07-04 07:14:05 INFO Message received in <3: {'username': 'os', 'content': 'hey'}
-2025-07-04 07:14:09 INFO Message received in <3: {'username': 'os', 'content': ':exit'}
-2025-07-04 07:14:12 INFO WebSocket disconnected from room <3
-2025-07-04 07:14:17 INFO WebSocket connected to room <3
-2025-07-04 07:15:08 INFO WebSocket disconnected from room <3
+2025-07-04 09:53:10 DEBUG detected 'bcrypt' backend, version '<unknown>'
+2025-07-04 09:53:10 DEBUG 'bcrypt' backend lacks $2$ support, enabling workaround
+2025-07-04 09:53:11 INFO GET /messages/test was called
+2025-07-04 09:53:11 INFO Received token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuYXZlIiwiZXhwIjoxNzUxNjM4OTkwfQ.RK7szDysuP_b_7sbPF_c1sFzhKKDxeXkyYOu2vaTiOM
+2025-07-04 09:53:11 INFO Authenticated user: nave
+2025-07-04 09:53:11 INFO WebSocket connected to room test
+2025-07-04 09:53:15 INFO Message received in test: {'username': 'nave', 'content': 'hey :)'}
+2025-07-04 09:53:21 INFO Message received in test: {'username': 'nave', 'content': 'hello!'}
+2025-07-04 09:53:24 INFO Message received in test: {'username': 'nave', 'content': 'byebye'}
+2025-07-04 09:53:25 INFO Message received in test: {'username': 'nave', 'content': 'exit'}
+2025-07-04 09:53:29 INFO Message received in test: {'username': 'nave', 'content': ':exit'}
+2025-07-04 09:53:34 INFO Message received in test: {'username': 'nave', 'content': 'Exit'}
+2025-07-04 09:53:39 INFO WebSocket disconnected from room test
+2025-07-04 09:53:45 INFO GET /messages/test was called
+2025-07-04 09:53:45 INFO Received token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuYXZlIiwiZXhwIjoxNzUxNjM5MDIzfQ.tfL1CmYlMWr-XgmkMjAFzoK0-K-Bbz54uKHrnpgM0MM
+2025-07-04 09:53:45 INFO Authenticated user: nave
+2025-07-04 09:53:45 INFO WebSocket connected to room test
+2025-07-04 09:53:54 INFO WebSocket disconnected from room test

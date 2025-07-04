@@ -27,6 +27,7 @@ def send_message(
 
 @router.get("/{room_name}", response_model=List[schemas.Message])
 def get_messages(room_name: str, db: Session = Depends(get_db)):
+    logger.info(f"GET /messages/{room_name} was called")
     room = chatroom_crud.get_chatroom_by_name(db, room_name)
     if not room:
         raise HTTPException(status_code=404, detail="Chat room not found")

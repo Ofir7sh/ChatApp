@@ -1,4 +1,4 @@
-from fastapi import WebSocket
+from fastapi import WebSocket, WebSocketDisconnect
 from typing import Dict, List
 
 class ConnectionManager:
@@ -15,6 +15,6 @@ class ConnectionManager:
             del self.active_connections[room]
 
     async def broadcast(self, room: str, message: dict):
-        for ws in self.active_connections.get(room, []):
-            await ws.send_json(message)
+        for connection in self.active_connections.get(room, []):
+            await connection.send_json(message)
 
