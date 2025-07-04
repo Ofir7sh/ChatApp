@@ -1,0 +1,37 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "${DB_PASSWORD}"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  init-db:
+    build:
+      context: .
+      dockerfile: init_db/Dockerfile
+    depends_on:
+      - db
+    env_file:
+      - .env
+    command: ["./init_db/wait-for-it.sh", "db:1433","-t", "45", "--", "python", "init_db/init_db.py"]
+
+  server:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - init-db
+    env_file:
+      - .env
+    command: ["./app/wait-for-it.sh", "db:1433", "-t", "45", "--", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+volumes:
+  mssql_data:
