@@ -2,27 +2,33 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import jwt
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import Request
-
 from fastapi import Depends, HTTPException
 from jose import JWTError
+import logging
+
+logger = logging.getLogger(__name__)
 
 ## TODO - move to sep config file
 SECRET_KEY = "your-secret-key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-## 
+##
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/login")
 
 def get_current_username(token: str = Depends(oauth2_scheme)):
+    logger.info(f"Received token: {token}") 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
+        print(f"Decoded username from token: {username}")  
         if username is None:
+            logger.warning("JWT token missing username claim")
             raise HTTPException(status_code=401, detail="Invalid token")
+        logger.info(f"Authenticated user: {username}")
         return username
-    except JWTError:
+    except JWTError as e:
+        logger.warning(f"JWT decode failed: {str(e)}")
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
