@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from app.config import DATABASE_URL
 
-DATABASE_URL = "mssql+pymssql://sa:Os1234567!!@localhost:1433/ChatAppDB"
 
 # יצירת מנוע חיבור למסד הנתונים
 engine = create_engine(DATABASE_URL)

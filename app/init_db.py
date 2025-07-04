@@ -1,14 +1,10 @@
 from sqlalchemy import create_engine, text
 from app.database import Base
-from app.models import user, chat_room, message  # ודאי שכל המודלים מיובאים כאן
-##TODO - Generic params
-
-MASTER_DATABASE_URL = "mssql+pymssql://sa:Os1234567!!@localhost:1433/master"
-APP_DB_NAME = "ChatAppDB"
-APP_DATABASE_URL = f"mssql+pymssql://sa:Os1234567!!@localhost:1433/{APP_DB_NAME}"
+from app.config import MASTER_DATABASE_URL, DATABASE_URL as APP_DATABASE_URL, DB_NAME as APP_DB_NAME
+from app.models import user, chat_room, message  
 
 def create_database():
-    engine = create_engine(MASTER_DATABASE_URL, echo=True)
+    engine = create_engine(MASTER_DATABASE_URL, echo=True, isolation_level="AUTOCOMMIT")
 
     with engine.connect() as conn:
         result = conn.execute(text(f"SELECT name FROM sys.databases WHERE name = '{APP_DB_NAME}'"))
@@ -21,7 +17,7 @@ def create_database():
 
 def create_tables():
     engine = create_engine(APP_DATABASE_URL, echo=True)
-    Base.metadata.drop_all(bind=engine)  # ניתן למחוק אם לא רוצים למחוק טבלאות קיימות
+    Base.metadata.drop_all(bind=engine) 
     print("Dropped all tables.")
     Base.metadata.create_all(bind=engine)
     print("Created all tables.")
