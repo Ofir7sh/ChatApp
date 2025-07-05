@@ -6,3 +6,4 @@ __pycache__/
 server.log
 .chatapp_token
 .chatapp_user
+tests/
