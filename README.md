@@ -134,6 +134,12 @@ python cli.py
 | **chat_rooms**| id, name                                        | Chat rooms 
 | **messages**  | id, content, username,timestamp,chat_room_id    | Messages within chat rooms  |
 
+## 🔄 Volumes
+Docker volumes are used in this project to persist data
+```
+volumes:
+  mssql_data:
+ ```
 ---
 
 ## 🗂️ Project Structure
