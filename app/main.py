@@ -1,19 +1,27 @@
-from fastapi import FastAPI
-from app.database import engine
-from app.database import Base
-from app.routes import user, chat_room, message
 import logging
-from app.routes import message_ws
+import sys
+from fastapi import FastAPI
+from app.database import engine, Base
+from app.routes import user, chat_room, message, message_ws
 
-# Define logger
-logging.basicConfig(
-    filename='server.log',          
-    level=logging.DEBUG,        
-    format='%(asctime)s %(levelname)s %(message)s',
+formatter = logging.Formatter(
+    '%(asctime)s %(levelname)s %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+file_handler = logging.FileHandler('server.log')
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(formatter)
+
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setLevel(logging.DEBUG)
+stream_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+logger.addHandler(stream_handler)
 
 # Validate tables
 Base.metadata.create_all(bind=engine)
@@ -25,4 +33,4 @@ app = FastAPI()
 app.include_router(user.router, prefix="/users", tags=["users"])
 app.include_router(chat_room.router, prefix="/chatrooms", tags=["chatrooms"])
 app.include_router(message.router, prefix="/messages", tags=["messages"])
-app.include_router(message_ws.router) 
+app.include_router(message_ws.router)

@@ -23,3 +23,7 @@ BASE_URL=f"http://{DB_HOST}:{DB_PORT}"
 TOKEN_FILE = os.environ["TOKEN_FILE"]
 USERNAME_FILE = os.environ["USERNAME_FILE"]
 WS_BASE_URL=os.environ["WS_BASE_URL"]
+
+# If API_HOST is not define so use 'localhost'
+API_HOST = os.environ.get("API_HOST", "localhost") 
+BASE_URL = f"http://{API_HOST}:8000"

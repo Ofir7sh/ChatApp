@@ -62,7 +62,7 @@ def check_user_exists(username: str) -> bool:
     return res.json().get("exists", False)
 
 async def websocket_chat(room_name: str, username: str, stop_event: threading.Event, token: str):
-    uri = f"{WS_BASE_URL}/{room_name}?token={token}"
+    uri = f"{WS_BASE_URL}/ws/{room_name}?token={token}"
     try:
         async with websockets.connect(uri) as websocket:
             print(f"Connected to WebSocket room: {room_name}")
