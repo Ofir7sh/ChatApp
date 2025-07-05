@@ -5,7 +5,7 @@ import threading
 import time
 import platform
 
-from app.config import BASE_URL, TOKEN_FILE, USERNAME_FILE
+from app.core.config import BASE_URL, TOKEN_FILE, USERNAME_FILE
 
 app = typer.Typer()
 
