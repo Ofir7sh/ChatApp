@@ -22,13 +22,13 @@ cd ChatApp
 Create a `.env` file with the following contents:
 
 ```env
-DB_USER = "sa"
+DB_USER="sa"
 DB_PASSWORD=YourStrongPassword
-DB_HOST = "db"
-DB_PORT = 1433
-DB_NAME = "ChatAppDB"
-BASE_URL = "http://server:8000"
-WS_BASE_URL=ws://server:8000
+DB_HOST="db"
+DB_PORT=1433
+DB_NAME="ChatAppDB"
+BASE_URL="http://server:8000"
+WS_BASE_URL="ws://server:8000"
 ```
 
 ### 3. Build the Containers
