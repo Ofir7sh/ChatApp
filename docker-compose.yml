@@ -32,6 +32,16 @@ services:
       - .env
     command: ["./init_db/wait-for-it.sh", "db:1433", "-t", "45", "--", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
   
+  cli:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    depends_on:
+      - server
+    env_file:
+      - .env
+    stdin_open: true     
+    tty: true          
 
 volumes:
   mssql_data:

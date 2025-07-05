@@ -22,3 +22,4 @@ MASTER_DATABASE_URL = f"mssql+pymssql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PO
 BASE_URL=f"http://{DB_HOST}:{DB_PORT}"
 TOKEN_FILE = os.environ["TOKEN_FILE"]
 USERNAME_FILE = os.environ["USERNAME_FILE"]
+WS_BASE_URL=os.environ["WS_BASE_URL"]
