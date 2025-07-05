@@ -33,9 +33,8 @@ WS_BASE_URL=ws://server:8000
 
 ### 3. Build the Containers
 Make sure you have the following installed:
-    Docker
-
-    Docker Compose
+    
+    Docker, Docker Compose
 
 ```bash
 docker-compose build
@@ -144,3 +143,5 @@ Typer-based Python CLI that lets users:
 * Pydantic
 * WebSockets
 * Docker + Docker Compose
+* wait-for-it.sh – Waiting for mmsql server for initail DB
+
