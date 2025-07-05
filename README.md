@@ -296,6 +296,11 @@ high-level flow of the components and their communication:
       - chat_rooms: add admin_id, is_private, secret_code
   
       - blocked_users
+- Enhance logging (e.g., log levels, file logging, error tracking)
+- Optimize performance
+- Implement QA process
+- Improve CLI UX
+  
   
 
   
