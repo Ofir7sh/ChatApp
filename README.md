@@ -20,6 +20,7 @@ cd ChatApp
 ### 2. Configure environment variables:
 
 Create a `.env` file with the following contents:
+# Pay attention to SQL Server password policy requirements: The password must be at least 8 characters long and contain characters from three of the following four sets: Uppercase letters, Lowercase letters, Base 10 digits, and Symbols
 
 ```env
 DB_USER="sa"
