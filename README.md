@@ -1,11 +1,8 @@
 # ChatApp - CLI-based Chat Application
 
 ChatApp is a simple chat application built with FastAPI, MSSQL, and a CLI interface powered by Typer.
-It uses Docker Compose to build a full environment, including:
-    * FastAPI server 
-    * Microsoft SQL Server database
-    * CLI client
-    * database initialization service 
+It uses Docker Compose to build a full environment, including: FastAPI server,Microsoft SQL Server database, CLI client, database initialization service 
+
 Supports two stages:
 ✅ Stage A – API-based CLI Chat
 ✅ Stage B – Real-time chat with WebSocket integration
