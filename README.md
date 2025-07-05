@@ -303,8 +303,3 @@ high-level flow of the components and their communication:
   
   
 
-  
-בב
-
-- ב
-- ב - ד
