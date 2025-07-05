@@ -19,7 +19,7 @@ def create_tables():
     engine = create_engine(APP_DATABASE_URL, echo=True)
     # Base.metadata.drop_all(bind=engine) 
     # print("Dropped all tables.")
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=engine, checkfirst=True)
     print("Created all tables.")
 
 if __name__ == "__main__":
