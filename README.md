@@ -247,31 +247,56 @@ high-level flow of the components and their communication:
 ```
 ✅ ## TODO:
 - Implenent c-stage:
+  
     - define the user who created the room as an ADMIN
+      
     - Admin user could decide whether the room is private / public
+      
     - Admin could block and remove users from a room_chat
+      
     - Enter privte chat root would be allowed only with uniq secret code
+  
  
     ** ServerSide:
+  
         ** /models
+  
           - chat_rooms: add: admin_id, is_private, secret_code
+  
           - Create new table - BlockedUsersInRoom
+  
         ** /schemas
+  
               - update ChatRoomBase, ChatRoomCreate: is_private, secrect_code
+  
               - add schema to "blocking"
+  
        ** CRUD (/crud)
+  
           - add func to chat_room.py (check admin, block user, add user to private room)
+  
        ** /routes
+  
             - chat_rooms - add routes
+  
        ** /websocket
+  
   ** Client side:
+  
       - add functionality:
+  
           - private room -> enter private key
+  
           - admin_user -> block users, add to private room, remove users, set room (private/public)
+  
   ** DB (MSSQL):
+  
       tables:
+  
       - chat_rooms: add admin_id, is_private, secret_code
+  
       - blocked_users
+  
 
   
 בב
