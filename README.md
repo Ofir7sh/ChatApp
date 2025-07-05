@@ -70,78 +70,172 @@ Or if you prefer to enter the CLI container shell manually:
 sudo docker exec -it chatapp-cli sh
 python cli.py
 ```
+---
 
-## 🧪 Usage
+## 🧪 Using the CLI
 
-After running the CLI, follow the instructions:
+- Enter your username. If new, you will be prompted to create a password.  
+- Log in with your username and password to receive a JWT token.  
+- Select a chat room from the list or create a new one (option 0).  
+- Inside the chat room:  
+  - Type messages and press Enter to send  
+  - Commands:  
+    - `:back` → Return to room selection  
+    - `:clear` → Clear terminal screen  
+    - `Ctrl+C` → Exit the CLI  
 
-1. **Enter username** – A new user will be registered if not found.
+---
 
-2. **Enter password** – Either for login or to register.
+## 💡 Key Features
 
-3. **Select a chat room**:
+- **Stage A** – Auto-refreshes messages every 5 seconds  
+- **Stage B** – Real-time two-way communication via WebSocket  
+- **Security** – JWT tokens for authenticated API requests  
 
-   * View existing rooms
-   * Create a new one (option `0`)
+---
 
-4. **Inside the chat room**:
+## 🧱 System Components
 
-   * Type your message and hit `Enter` to send
-   * Use commands:
+### Server Side - FastAPI (`app/`)
 
-     * `:back` → Return to room selection
-     * `:clear` → Clear terminal
-     * `Ctrl+C` → Exit
+- **API Endpoints:**  
+  - Users (register, login)  
+  - Chat rooms (list, create)  
+  - Messages (send, fetch)  
+  - WebSocket for real-time chat (Stage B)  
 
-    💡 a-stage (main) - Messages are automatically refreshed and displayed every 5 seconds
+- **Technologies:**  
+  - FastAPI  
+  - SQLAlchemy ORM  
+  - MSSQL (SQL Server 2022)  
+  - Pydantic schemas 
+  - WebSockets  
+  - JWT authentication  
 
-    💡 b-stage - Real-time, two-way communication baset WebSocket  
+### Client Side - CLI (`client/`)
 
-        once a room is selected:
+- Python CLI built with Typer  
+- User registration/login, room selection, messaging  
+- WebSocket support for real-time communication  
 
-            WebSocket connection is opened: ws://server:8000/ws/<room_name>?token=...
+### Database Initialization (`init_db/`)
 
-            Users can send and receive messages in real time
+- MSSQL 2022 container  
+- Tables: users, chat_rooms, messages  
+- Automatic initialization via Python script on container startup  
 
+---
 
-    🔐 After login, All requests to protected endpoints include JWT token in the Authorization: Bearer <token> header. 
-    
- 
-## 🧱 Components
+## 🗃️ Database Schema Overview (define in app/models)
 
-### server
+| Table         | Key Columns                                      | Notes                       |
+|---------------|-------------------------------------------------|-----------------------------|
+| **users**     | id, username, hashed_password                   | Stores user credentials securely |
+| **chat_rooms**| id, name                                        | Chat rooms 
+| **messages**  | id, content, username,timestamp,chat_room_id    | Messages within chat rooms  |
 
-FastAPI server that handles CRUD operations using endpoints for:
+---
 
-* Users (register, login)
-* Chat rooms (list, create)
-* Messages (send, fetch)
-* WebSocket-based chat messaging (Stage B)
+## 🗂️ Project Structure
 
-### cli
+```plaintext
+ChatApp/
+├── docker-compose.yml          
+├── .gitignore
+├── README.md
+│
+├── app/                        # FastAPI backend
+│   ├── Dockerfile             
+│   ├── __init__.py
+│   ├── main.py                  # App entrypoints
+│   ├── database.py              # DB connection setup
+│   ├── requirements.txt
+│   │
+│   ├── core/                    # Configuration & security
+│   │   ├── config.py           
+│   │   └── security.py         
+│   │
+│   ├── crud/                    # CRUD logic
+│   │   ├── user.py             
+│   │   ├── chat_room.py        
+│   │   └── message.py          
+│   │
+│   ├── models/                  # SQLAlchemy models
+│   │   ├── user.py
+│   │   ├── chat_room.py
+│   │   └── message.py
+│   │
+│   ├── schemas/                # Pydantic schemas
+│   │   ├── user.py
+│   │   ├── chat_room.py
+│   │   └── message.py
+│   │
+│   └── routes/                 # API routes
+│       ├── user.py            
+│       ├── chat_room.py       
+│       └── message.py  
+        └── message_ws.py        # WebSocket connection
+│
+├── client/                     # CLI client
+│   ├── Dockerfile              
+│   ├── cli.py                  # CLI main script
+│   ├── requirements.txt
+│   └── __pycache__/            
+│
+├── init_db/                    # DB initialization + tables creation
+│   ├── Dockerfile
+│   ├── init_db.py              # DB init script
+│   ├── wait-for-it.sh          # Wait-for-DB script
+│   └── requirements.txt
+```
 
-Typer-based Python CLI that lets users:
+---
 
-* Register/login
-* View chat rooms list, Create new chat roon, Enter chat rooms
-* Send & receive messages
-* Communicate in real-time via WebSocket (Stage B)
+## 🛠️ Technologies Used
 
-## 🗃️ Database
+- **Language:** Python 3.12  
+- **Backend:** FastAPI  
+- **CLI:** Typer  
+- **Database:** MSSQL (SQL Server 2022)
+- **ORM:** SQLAlchemy  
+- **Security:** JWT, password hashing  
+- **Realtime:** WebSockets  
+- **Containerization:** Docker + Docker Compose  
+- **Helpers:** pymssql, Pydantic, wait-for-it.sh  
 
-* SQL Server 2022-latest container via Docker
-* Tables: `users`, `chat_rooms`, `messages`
-    * Initialized automatically using SQLAlchemy (in 'init_db' python script) during containers startup
+---
 
-## 🛠️ Technologies
+## 🏗️ Container Architecture
 
-* Python3.12
-* FastAPI
-* Typer
-* MSSQL (SQL Server)
-* SQLAlchemy
-* Pydantic
-* WebSockets
-* Docker + Docker Compose
-* pymssql
-* wait_for_it.sh
+| Container Name   | Purpose                      | Dependencies                |
+|------------------|------------------------------|-----------------------------|
+| **db**           | MSSQL Server database         | None                        |
+| **init_db**      | Database initialization       | Depends on `db`             |
+| **server**       | FastAPI backend API           | Depends on `db`             |
+| **cli**          | CLI client                    | None         |
+
+- All containers run in a shared Docker network.  
+- CLI communicates with the server via `http://server:8000`  
+- WebSocket connections use `ws://server:8000/ws/...` in Stage B  
+
+---
+
+## Flow Diagram - Client, Server, and Database Communication
+
+high-level flow of the components and their communication:
+
+```plaintext
++------------+        HTTP/API        +------------+        SQL Queries       +------------+
+|   CLI      | <--------------------> |  FastAPI   | <---------------------> |   MSSQL    |
+| (Typer)    |                        |  Server    |      ORM (SQLAlchemy)   |  Database  |
++------------+                       +------------+                       +------------+
+       |                                      |
+       | WebSocket (Stage B)                   |
+       +--------------------------------------+
+
+- CLI sends HTTP requests to FastAPI for login/registeration, room selection/creation, message fetch/post.
+- FastAPI handles API logic, validates JWT tokens, accesses DB via ORM.
+- MSSQL stores all data: users, chat rooms, messages.
+- For realtime chat (Stage B), CLI opens WebSocket connection to FastAPI to send/receive messages live.
+- Application full enviroments build with docker-compose.
+```
