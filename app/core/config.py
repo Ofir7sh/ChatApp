@@ -19,6 +19,6 @@ DB_NAME = os.environ["DB_NAME"]
 DATABASE_URL = f"mssql+pymssql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 MASTER_DATABASE_URL = f"mssql+pymssql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/master"
 
-BASE_URL = os.environ["BASE_URL"]
+BASE_URL=f"http://{DB_HOST}:{DB_PORT}"
 TOKEN_FILE = os.environ["TOKEN_FILE"]
 USERNAME_FILE = os.environ["USERNAME_FILE"]
