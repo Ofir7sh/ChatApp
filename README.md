@@ -544,6 +544,7 @@ high-level flow of the components and their communication:
   
       - blocked_users
 - Enhance logging (e.g., log levels, file logging, error tracking)
+- Improve database initialization and data persistence workflow to improve maintainability and scalability
 - Optimize performance
 - Implement QA process
 - Improve CLI UX
