@@ -23,7 +23,7 @@ Create a `.env` file with the following contents:
 
 ```env
 DB_USER="sa"
-DB_PASSWORD=YourStrongPassword
+DB_PASSWORD="YourStrongPassword"
 DB_HOST="db"
 DB_PORT=1433
 DB_NAME="ChatAppDB"
