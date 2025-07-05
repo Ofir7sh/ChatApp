@@ -4,7 +4,8 @@ ChatApp is a simple chat application built with FastAPI, MSSQL, and a CLI interf
 It uses Docker Compose to build a full environment, including: FastAPI server,Microsoft SQL Server database, CLI client, database initialization service 
 
 Supports two stages:
-✅ Stage A – API-based CLI Chat
+✅ Stage A – CLI Chat API-based
+
 ✅ Stage B – Real-time chat with WebSocket integration
 
 ## 🚀 Setup Instructions
@@ -33,6 +34,7 @@ WS_BASE_URL=ws://server:8000
 ### 3. Build the Containers
 Make sure you have the following installed:
     Docker
+
     Docker Compose
 
 ```bash
@@ -93,13 +95,17 @@ After running the CLI, follow the instructions:
      * `Ctrl+C` → Exit
 
     💡 a-stage (main) - Messages are automatically refreshed and displayed every 5 seconds
+
     💡 b-stage - Real-time, two-way communication baset WebSocket  
+
         once a room is selected:
+
             WebSocket connection is opened: ws://server:8000/ws/<room_name>?token=...
+
             Users can send and receive messages in real time
 
 
-    🔐 The CLI authenticates each user using a JWT token stored locally. after login, All requests to protected endpoints include this token in the Authorization: Bearer <token> header. 
+    🔐 After login, All requests to protected endpoints include JWT token in the Authorization: Bearer <token> header. 
     
  
 ## 🧱 Components
