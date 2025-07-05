@@ -15,9 +15,5 @@ MASTER_DATABASE_URL = f"mssql+pymssql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PO
 
 BASE_URL = os.getenv("BASE_URL")
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
-
 TOKEN_FILE = ".chatapp_token"
 USERNAME_FILE = ".chatapp_user"
